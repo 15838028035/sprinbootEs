@@ -8,6 +8,6 @@ RUN mkdir -p /app/lib
 
 COPY target/lib/* /app/lib
 COPY config/* /app/config/
-ADD sprinbootEs-0.0.1-SNAPSHOT.jar /app/sprinbootEs-0.0.1-SNAPSHOT.jar
+ADD sprinbootes-0.0.1-SNAPSHOT.jar /app/sprinbootes-0.0.1-SNAPSHOT.jar
 
-ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-Xshareclasses","-Xquickstart","-jar","/app/sprinbootEs-0.0.1-SNAPSHOT.jar"]
+ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-Xshareclasses","-Xquickstart","-jar","/app/sprinbootes-0.0.1-SNAPSHOT.jar"]
