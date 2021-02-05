@@ -1,0 +1,258 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>权限信息表新增、编辑</title>
+   <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!--css样式-->
+    <link href="scripts/bootstrap/css/bootstrap.css" rel="stylesheet">
+    <link href="scripts/bootstrap-table/bootstrap-table.css" rel="stylesheet">
+    <!--js-->
+
+    <script src="scripts/jquery/jquery-3.2.0.min.js"></script>
+    <script src="scripts/bootstrap/js/bootstrap.js"></script>
+
+    <script src="scripts/bootbox/bootbox.min.js"></script>
+
+    <script src="scripts/bootstrap-datetimepicker/js/moment.js"></script>
+    <script src="scripts/bootstrap-datetimepicker/js/moment_zh-CN.js"></script>
+    <link href="scripts/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" rel="stylesheet">
+    <script src="scripts/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
+    <script src="scripts/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+
+    <link href="scripts/bootstrapvalidator/css/bootstrapValidator.css" rel="stylesheet">
+    <script src="scripts/bootstrapvalidator/js/bootstrapValidator.js"></script>
+    <script src="scripts/bootstrapvalidator/js/language/zh_CN.js"></script>
+
+    <link href="scripts/bootstrap-fileinput/css/fileinput.css" rel="stylesheet">
+    <script src="scripts/bootstrap-fileinput/js/fileinput.js"></script>
+
+    <script src="scripts/jquery.cookie.js"></script>
+    <script src="scripts/common.js"></script>
+    
+</head>
+<body>
+<div class="container">
+    <form  class="form-horizontal" method="post" name="upmPermissionForm" id="upmPermissionForm">
+    <input type="hidden" name="id" id="id" />
+    <input type="hidden" name="operate" id="operate"  />
+           
+            <div class="form-group">
+             <label for="appId">应用ID</label>
+                 <input class="form-control" type="text"  name="appId" id="appId"  readonly="readonly"/>
+            </div>
+            <div class="form-group">
+             <label for="parentId">父ID</label>
+                 <input class="form-control" type="text"  name="parentId" id="parentId"  readonly="readonly" />
+            </div>
+            <div class="form-group">
+             <label for="perName">权限名称</label>
+                 <input class="form-control" type="text"  name="perName" id="perName"  />
+            </div>
+            <div class="form-group">
+             <label for="perType">权限类型</label>
+                 <input class="form-control" type="text"  name="perType" id="perType"  />
+            </div>
+            <div class="form-group">
+             <label for="url">URL</label>
+                 <input class="form-control" type="text"  name="url" id="url"  />
+            </div>
+            <div class="form-group">
+             <label for="code">编码</label>
+                 <input class="form-control" type="text"  name="code" id="code"  />
+            </div>
+            <div class="form-group">
+             <label for="keyCode">编码key</label>
+                 <input class="form-control" type="text"  name="keyCode" id="keyCode"  />
+            </div>
+            <div class="form-group">
+             <label for="state">状态:</label>
+                <input type="radio" name="state" id="state1" value="1"> 正常
+                <input type="radio" name="state" id="state0" value="0"> 加锁
+            </div>
+            <div class="form-group">
+             <label for="remark">备注</label>
+                 <input class="form-control" type="text"  name="remark" id="remark"  />
+            </div>
+            <div class="form-group">
+             <label for="sortNo">排序编号</label>
+                 <input class="form-control" type="text"  name="sortNo" id="sortNo"  />
+            </div>
+       
+      <div class="form-group"> 
+                 <button id="save"  class="btn btn-default">保存</button>
+                <button type="button" id="backToHomeButton"  class="btn btn-default">返回</button>
+        </div>  
+       
+        </form>
+</div>
+<script>
+         //拦截器判断
+     var token = $.cookie('bearcktkaeskey');
+    if (token == ""||token==undefined) {
+        location.href = ctx + '/login.html';
+    }
+
+    //加载
+    var loadInfo = {
+        init: function () {
+            var appId = getUrlParam("appId");
+        	var parentId = getUrlParam("parentId");
+        	 $("#appId").val(appId);
+             $("#parentId").val(parentId);
+            this.load_Info();
+        },
+        load_Info:function(){
+            //截取参数
+            $.getUrlParam = function (name) {
+                var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+                var r = window.location.search.substr(1).match(reg);
+                if (r != null) return unescape(r[2]);
+                return null;
+            }
+
+            var id = $.getUrlParam('id');
+            var operate = $.getUrlParam('operate');
+            
+            if(id != null){
+                $("#id").val(id);
+                $.ajax({
+                    url: ctx+"/api/UpmPermission/"+id+"?TOKEN="+token,
+                    type: "get",
+                    dataType: "json",
+                    success: function(data){
+                            $("#appId").val(data.appId);
+                            $("#parentId").val(data.parentId);
+                            $("#perName").val(data.perName);
+                            $("#perType").val(data.perType);
+                            $("#url").val(data.url);
+                            $("#code").val(data.code);
+                            $("#keyCode").val(data.keyCode);
+                            $("[name='state'][value='"+data.state+"']").prop("checked", "checked");
+                            $("#remark").val(data.remark);
+                            $("#sortNo").val(data.sortNo);
+                    },
+                    error: function(data){
+                        bootbox.alert("异常");
+                        return false;
+                    }
+                });
+            }
+        }
+    };//end loadInfo
+    
+    //校验
+     var bootstrapValidator = {
+        init: function () {
+            this.doBootstrapValidator();
+        },
+        doBootstrapValidator:function(){
+              $("#upmPermissionForm").bootstrapValidator({
+            
+            fields: {
+                 "appId": {
+                    message: '应用ID不能为空',
+                    validators: {  
+                                     notEmpty: {  
+                                        message: '应用ID不能为空'  
+                                    } 
+                                    
+                                }  
+                
+               },
+                 "state": {
+                    message: '1:正常，0：加锁不能为空',
+                    validators: {  
+                                     notEmpty: {  
+                                        message: '1:正常，0：加锁不能为空'  
+                                    } 
+                                    
+                                }  
+                
+               }
+                 
+            }
+        }
+        );
+        
+        }
+    };//end bootstrapValidator
+    
+    
+    //保存或更新
+    var saveOrUpdate = {
+        init: function () {
+            this.doSaveOrUpdate();
+        },
+        doSaveOrUpdate:function(){
+        
+          //截取参数
+            $.getUrlParam = function (name) {
+                var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+                var r = window.location.search.substr(1).match(reg);
+                if (r != null) return unescape(r[2]);
+                return null;
+            }
+
+            var id = $.getUrlParam('id');
+            
+         $("#save").click(function () {//非submit按钮点击后进行验证，如果是submit则无需此句直接验证
+                $("#upmPermissionForm").bootstrapValidator('validate');//提交验证
+                if ($("#upmPermissionForm").data('bootstrapValidator').isValid()) {//获取验证结果，如果成功，执行下面代码
+                    var type = "post";
+                    var url = ctx + "/api/UpmPermission?TOKEN="+token;
+                    var operate = $.getUrlParam('operate');
+                    if (operate == "edit"){
+                        type = "put";
+                        url = ctx + "/api/UpmPermission/"+id+"?TOKEN="+token;
+                    }else {
+                        $("#id").val(0);
+                    }
+                    
+                    var data = $('#upmPermissionForm').serialize();
+                    $.ajax({
+                        url: url,
+                        data:data,
+                        type: type,
+                        dataType: "json",
+                        success: function (data) {
+                            bootbox.alert(data.respMsg);
+                        },
+                        error: function (data) {
+                            bootbox.alert("异常");
+                            return false;
+                        }
+                    });
+                }
+
+            });
+        
+        }
+    };//end saveOrUpdate
+    
+    //返回
+     var backToHome = {
+        init: function () {
+            this.doBackToHome();
+        },
+        doBackToHome:function(){
+            $("#backToHomeButton").click(function () {
+                window.history.go(-1);
+            });
+        }
+    };//end backToHomeButton
+        
+    //初始化加载    
+    $(function () {
+        loadInfo.init();
+        bootstrapValidator.init();
+        saveOrUpdate.init();
+        backToHome.init();
+    });
+    
+</script>
+</body>
+</html>

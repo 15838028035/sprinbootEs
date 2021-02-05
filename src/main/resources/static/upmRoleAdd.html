@@ -1,0 +1,283 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>角色信息表新增、编辑</title>
+   <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!--css样式-->
+    <link href="scripts/bootstrap/css/bootstrap.css" rel="stylesheet">
+    <link href="scripts/bootstrap-table/bootstrap-table.css" rel="stylesheet">
+    <!--js-->
+
+    <script src="scripts/jquery/jquery-3.2.0.min.js"></script>
+    <script src="scripts/bootstrap/js/bootstrap.js"></script>
+    <script src="scripts/bootstrap-table/bootstrap-table.js"></script>
+    <script src="scripts/bootstrap-table/locale/bootstrap-table-zh-CN.js"></script>
+    <script src="scripts/bootstrap-table/extensions/multiple-sort/bootstrap-table-multiple-sort.js"></script>
+
+    <link href="scripts/x-editable/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet">
+    <script src="scripts/bootstrap-table/extensions/editable/bootstrap-table-editable.js"></script>
+    <script src="scripts/x-editable/bootstrap3-editable/js/bootstrap-editable.js"></script>
+
+    <link href="scripts/bootstrap-treeview/bootstrap-treeview.css" rel="stylesheet">
+    <script src="scripts/bootstrap-treeview/bootstrap-treeview.min.js"></script>
+
+    <script src="scripts/bootbox/bootbox.min.js"></script>
+
+    <link href="scripts/bootstrap3-dialog/css/bootstrap-dialog.css" rel="stylesheet">
+    <script src="scripts/bootstrap3-dialog/js/bootstrap-dialog.js"></script>
+    <script src="scripts/bootstrap3-dialog/bootstrap3-dialog-ext.js"></script>
+
+    <script src="scripts/bootstrap-datetimepicker/js/moment.js"></script>
+    <script src="scripts/bootstrap-datetimepicker/js/moment_zh-CN.js"></script>
+    <link href="scripts/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" rel="stylesheet">
+    <script src="scripts/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
+    <script src="scripts/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+
+    <link href="scripts/bootstrapvalidator/css/bootstrapValidator.css" rel="stylesheet">
+    <script src="scripts/bootstrapvalidator/js/bootstrapValidator.js"></script>
+    <script src="scripts/bootstrapvalidator/js/language/zh_CN.js"></script>
+
+    <link href="scripts/bootstrap-fileinput/css/fileinput.css" rel="stylesheet">
+    <script src="scripts/bootstrap-fileinput/js/fileinput.js"></script>
+
+    <script src="scripts/jquery.cookie.js"></script>
+    <script src="scripts/common.js"></script>
+	<script  type="text/javascript">
+    $(document).ready(function(){
+                 
+          $(".datetimepicker").datetimepicker({
+                language: 'zh-CN',
+                 format: 'yyyy-mm-dd hh:ii:ss',//格式化时间,
+                 autoclose:true,//日期选择完成后是否关闭选择框
+                 //minView: "month",//设置只显示到月份
+                 clearBtn:true // 自定义属性,true 显示 清空按钮 false 隐藏 默认:true
+             });
+          
+          var id = getUrlParam('id');
+          var appId = getUrlParam('appId');
+          
+          var token = $.cookie('bearcktkaeskey');
+          if (token == ""||token==undefined) {
+                 location.href = ctx + '/login.html';
+           }
+          
+            //获取权限菜单树
+            var jsonData = $.ajax({
+                          url:ctx+"/api/UpmRole/getPermissionTree?strRoleId=" + id +"&appId="+appId+"&TOKEN="+token,
+                          async:false,
+                          cache:false,
+                          dataType:"text"
+            }).responseText;
+            
+            jsonData = "[" + jsonData + "]";
+            
+            var dataObj=eval("("+jsonData+")");
+            
+              $('#treediv').treeview({
+                    data:dataObj,
+                    levels: 5,
+                    showIcon: true,  
+                    multiSelect: true,
+                    highlightSelected: true, //是否高亮选中
+                    highlightSearchResults:true,
+                    showCheckbox:true,
+                    showIcon:true
+             }
+             ); 
+              
+             
+              $("#searchTreeBtn").click(function(){
+                  var searchText =$("#searchText").val();
+                  $('#treediv').treeview('search', [searchText, {
+                        ignoreCase: true,     // case insensitive
+                        exactMatch: false,    // like or equals
+                        revealResults: true,  // reveal matching nodes
+                      }]);
+              });
+              
+              $("#selectAll").click(function(){
+                  $('#treediv').treeview('checkAll', { silent: true });
+              });
+              
+              $("#unselectAll").click(function(){
+                  $('#treediv').treeview('uncheckAll', { silent: true });
+              });
+    });
+</script>
+</head>
+<body>
+<div class="container">
+	<form  class="form-horizontal" method="post" name="upmRoleForm" id="upmRoleForm">
+	<input type="hidden" name="id" id="id" />
+	<input type="hidden" name="operate" id="operate"  />
+	<input type="hidden" name="permissions" id="permissions"  />
+	
+      		<div class="form-group">
+			 <label for="roleCode">角色编码</label>
+		 	     <input class="form-control" type="text"  name="roleCode" id="roleCode"  />
+		 	</div>
+      		<div class="form-group">
+			 <label for="appId">应用ID</label>
+		 	     <input class="form-control" type="text"  name="appId" id="appId"  />
+		 	</div>
+      		<div class="form-group">
+			 <label for="roleName">角色名称</label>
+		 	     <input class="form-control" type="text"  name="roleName" id="roleName"  />
+		 	</div>
+      		<div class="form-group">
+			 <label for="roleDesc">角色描述</label>
+		 	      <textarea class="form-control" id="roleDesc" name="roleDesc" rows="5" ></textarea>
+		 	</div>
+      		<div class="form-group">
+			 <label for="lockStatus">加锁状态</label>
+                <input type="radio" name="lockStatus"  value="1">是
+                <input type="radio" name="lockStatus"  value="0">否
+		 	</div>
+		 	
+		 	<div class="form-group">
+             <label for="treediv">权限树</label>
+              <input class="form-control" type="text"  name="searchText" id="searchText"/>
+               <button type="button" id="searchTreeBtn"  class="btn btn-default">搜索</button> 
+               <button type="button" id="selectAll"  class="btn btn-default">全选</button> 
+               <button type="button" id="unselectAll"  class="btn btn-default">取消全选</button> 
+             <div id="treediv"></div>
+            </div>
+       
+ 	  <div class="form-group"> 
+                 <button id="save"  class="btn btn-default">保存</button>
+                <button type="button" id="backToHomeButton"  class="btn btn-default">返回</button>
+        </div>	
+       
+    	</form>
+</div>
+<script>
+		 //拦截器判断
+        var token = $.cookie('bearcktkaeskey');
+        if (token == ""||token==undefined) {
+            location.href = ctx + '/login.html';
+        }
+
+        $(function () {
+            //截取参数
+            $.getUrlParam = function (name) {
+                var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+                var r = window.location.search.substr(1).match(reg);
+                if (r != null) return unescape(r[2]);
+                return null;
+            }
+
+            var id = $.getUrlParam('id');
+            var operate = $.getUrlParam('operate');
+            $("#operate").val(operate);
+            
+            if(id != null){
+                $("#id").val(id);
+                $.ajax({
+                    url: ctx+"/api/UpmRole/"+id+"?TOKEN="+token,
+                    type: "get",
+                    dataType: "json",
+                    success: function(data){
+                            $("#id").val(data.id);
+                            $("#roleCode").val(data.roleCode);
+                            $("#appId").val(data.appId);
+                            $("#roleName").val(data.roleName);
+                            $("#roleDesc").val(data.roleDesc);
+                            $("input [name='lockStatus'][value='+data.lockStatus+']").prop("checked", "checked");
+                    },
+                    error: function(data){
+                        bootbox.alert("异常");
+                        return false;
+                    }
+                });
+            }
+          $("#upmRoleForm").bootstrapValidator({
+			
+			fields: {
+		 		 "roleCode": {
+					message: '角色编码不能为空',
+					validators: {  
+                       				 notEmpty: {  
+                        				message: '角色编码不能为空'  
+                        			} 
+                        			
+                    			}  
+				
+		       },
+		 		 "roleName": {
+					message: '角色名称不能为空',
+					validators: {  
+                       				 notEmpty: {  
+                        				message: '角色名称不能为空'  
+                        			} 
+                        			
+                    			}  
+				
+		       }
+		    }
+		}
+ 		);
+		
+            $("#save").click(function () {//非submit按钮点击后进行验证，如果是submit则无需此句直接验证
+                $("#upmRoleForm").bootstrapValidator('validate');//提交验证
+                if ($("#upmRoleForm").data('bootstrapValidator').isValid()) {//获取验证结果，如果成功，执行下面代码
+                    var type = "post";
+                    var url = ctx + "/api/UpmRole?TOKEN="+token;
+                    if (operate == "edit"){
+                        type = "put";
+                        url = ctx + "/api/UpmRole/"+id+"?TOKEN="+token;
+                    }else {
+                    	$("#id").val(0);
+                    }
+                    
+                    addRoleAction();
+                }
+
+            });
+
+            $("#backToHomeButton").click(function () {
+                window.history.go(-1);
+            });
+        });
+        
+        var batchid="";
+        function addRoleAction(){
+            batchid="";
+            var treeNodeIds = $("#treediv").treeview("getChecked");
+            
+            var treeNodeText = "";
+            var treeIds = "";
+            
+            $.each(treeNodeIds, function (index, nodeItem) {
+                var nodeId = nodeItem.id;
+                treeIds = treeIds+ nodeId;
+                    treeIds += ",";
+            });
+            
+            if(treeIds==""){
+                bootbox.alert('请选择一条记录');
+                return;
+            }
+            
+            treeIds=treeIds.substring(0,treeIds.length-1);
+            document.getElementById("permissions").value = treeIds;
+                
+             $.ajax({
+                    type:'POST',
+                    url:ctx+"/api/UpmRole?TOKEN="+token,
+                    contentType:'application/x-www-form-urlencoded; charset=UTF-8',
+                    data: $("#upmRoleForm").serialize(),
+                    dataType:'json',
+                    async: false,
+                    globle:false,
+                    success: function(data) {
+                        bootbox.alert(data.respMsg);
+                    }
+             });
+        }
+</script>
+</body>
+</html>

@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+
+<mapper namespace="com.thinkit.cloud.upm.dao.UpmRoleMapper">
+    <resultMap id="upmRoleResult" type="com.thinkit.cloud.upm.bean.UpmRole">
+   	  	<result property="id" column="id" jdbcType="BIGINT"   />
+   	  	<result property="roleCode" column="role_code" jdbcType="VARCHAR"   />
+   	  	<result property="appId" column="app_id" jdbcType="VARCHAR"   />
+   	  	<result property="roleName" column="role_name" jdbcType="VARCHAR"   />
+   	  	<result property="roleDesc" column="role_desc" jdbcType="VARCHAR"   />
+   	  	<result property="lockStatus" column="lock_Status" jdbcType="VARCHAR"   />
+   	  	<result property="createUserId" column="create_user_id" jdbcType="BIGINT"   />
+   	  	<result property="createUserName" column="create_user_name" jdbcType="VARCHAR"   />
+   	  	<result property="createTime" column="create_time" jdbcType="TIMESTAMP"   />
+   	  	<result property="updateUserId" column="update_user_id" jdbcType="BIGINT"   />
+   	  	<result property="updateUserName" column="update_user_name" jdbcType="VARCHAR"   />
+   	  	<result property="updateTime" column="update_time" jdbcType="TIMESTAMP"   />
+    </resultMap>
+
+	<sql id="Base_Column_List">
+	    <![CDATA[
+	   
+        	id ,
+        	role_code ,
+        	app_id ,
+        	role_name ,
+        	role_desc ,
+        	lock_Status ,
+        	create_user_id ,
+        	create_user_name ,
+        	create_time ,
+        	update_user_id ,
+        	update_user_name ,
+        	update_time 
+	    ]]>
+	</sql>
+
+   <select id="selectByPrimaryKey" resultMap="upmRoleResult">
+	 select 
+	    <include refid="Base_Column_List"/>
+	    
+	        from upm_role 
+	        where 
+		       id = #{id,jdbcType=BIGINT}
+			
+</select>
+
+ <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+           delete from upm_role where
+        id = #{id,jdbcType=BIGINT}
+	
+       </delete>
+
+ <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+
+        INSERT INTO upm_role (
+         id, role_code, app_id, role_name, role_desc, lock_Status, create_user_id, create_user_name, create_time, update_user_id, update_user_name, update_time
+        ) VALUES (
+         #{id,jdbcType=BIGINT}, #{roleCode,jdbcType=VARCHAR}, #{appId,jdbcType=VARCHAR}, #{roleName,jdbcType=VARCHAR}, #{roleDesc,jdbcType=VARCHAR}, #{lockStatus,jdbcType=VARCHAR}, #{createUserId,jdbcType=BIGINT}, #{createUserName,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateUserId,jdbcType=BIGINT}, #{updateUserName,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}        
+        )
+   
+</insert>
+
+ <insert id="insertSelective" parameterType="com.thinkit.cloud.upm.bean.UpmRole">
+          INSERT INTO upm_role 
+	         <trim prefix="(" suffix=")" suffixOverrides="," >
+	    	<if test="id != null" >
+        		id,
+     	 	</if>
+	    	<if test="roleCode != null" >
+        		role_code,
+     	 	</if>
+	    	<if test="appId != null" >
+        		app_id,
+     	 	</if>
+	    	<if test="roleName != null" >
+        		role_name,
+     	 	</if>
+	    	<if test="roleDesc != null" >
+        		role_desc,
+     	 	</if>
+	    	<if test="lockStatus != null" >
+        		lock_Status,
+     	 	</if>
+	    	<if test="createUserId != null" >
+        		create_user_id,
+     	 	</if>
+	    	<if test="createUserName != null" >
+        		create_user_name,
+     	 	</if>
+	    	<if test="createTime != null" >
+        		create_time,
+     	 	</if>
+	    	<if test="updateUserId != null" >
+        		update_user_id,
+     	 	</if>
+	    	<if test="updateUserName != null" >
+        		update_user_name,
+     	 	</if>
+	    	<if test="updateTime != null" >
+        		update_time,
+     	 	</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides="," >
+
+	    		<if test="id != null" >
+        		     #{id,jdbcType=BIGINT},
+     	 		</if>
+	    		<if test="roleCode != null" >
+        		     #{roleCode,jdbcType=VARCHAR},
+     	 		</if>
+	    		<if test="appId != null" >
+        		     #{appId,jdbcType=VARCHAR},
+     	 		</if>
+	    		<if test="roleName != null" >
+        		     #{roleName,jdbcType=VARCHAR},
+     	 		</if>
+	    		<if test="roleDesc != null" >
+        		     #{roleDesc,jdbcType=VARCHAR},
+     	 		</if>
+	    		<if test="lockStatus != null" >
+        		     #{lockStatus,jdbcType=VARCHAR},
+     	 		</if>
+	    		<if test="createUserId != null" >
+        		     #{createUserId,jdbcType=BIGINT},
+     	 		</if>
+	    		<if test="createUserName != null" >
+        		     #{createUserName,jdbcType=VARCHAR},
+     	 		</if>
+	    		<if test="createTime != null" >
+        		     #{createTime,jdbcType=TIMESTAMP},
+     	 		</if>
+	    		<if test="updateUserId != null" >
+        		     #{updateUserId,jdbcType=BIGINT},
+     	 		</if>
+	    		<if test="updateUserName != null" >
+        		     #{updateUserName,jdbcType=VARCHAR},
+     	 		</if>
+	    		<if test="updateTime != null" >
+        		     #{updateTime,jdbcType=TIMESTAMP},
+     	 		</if>
+		</trim>
+ </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.thinkit.cloud.upm.bean.UpmRole">
+    
+        UPDATE upm_role 
+     
+      <set >
+				<if test="roleCode != null and  roleCode != ''" >
+				role_code = #{roleCode,jdbcType=VARCHAR} ,
+				</if>
+				<if test="appId != null and  appId != ''" >
+				app_id = #{appId,jdbcType=VARCHAR} ,
+				</if>
+				<if test="roleName != null and  roleName != ''" >
+				role_name = #{roleName,jdbcType=VARCHAR} ,
+				</if>
+				<if test="roleDesc != null and  roleDesc != ''" >
+				role_desc = #{roleDesc,jdbcType=VARCHAR} ,
+				</if>
+				<if test="lockStatus != null and  lockStatus != ''" >
+				lock_Status = #{lockStatus,jdbcType=VARCHAR} ,
+				</if>
+				<if test="createUserId != null ">
+				create_user_id = #{createUserId,jdbcType=BIGINT} ,
+				</if>
+				<if test="createUserName != null and  createUserName != ''" >
+				create_user_name = #{createUserName,jdbcType=VARCHAR} ,
+				</if>
+				<if test="createTime != null ">
+				create_time = #{createTime,jdbcType=TIMESTAMP} ,
+				</if>
+				<if test="updateUserId != null ">
+				update_user_id = #{updateUserId,jdbcType=BIGINT} ,
+				</if>
+				<if test="updateUserName != null and  updateUserName != ''" >
+				update_user_name = #{updateUserName,jdbcType=VARCHAR} ,
+				</if>
+				<if test="updateTime != null ">
+				update_time = #{updateTime,jdbcType=TIMESTAMP} ,
+				</if>
+
+	 </set>
+        WHERE 
+	        id = #{id,jdbcType=BIGINT}
+		
+    </update>
+   
+    <update id="updateByPrimaryKey" >
+
+        UPDATE upm_role SET
+	        role_code = #{roleCode} , app_id = #{appId} , role_name = #{roleName} , role_desc = #{roleDesc} , lock_Status = #{lockStatus} , create_user_id = #{createUserId} , create_user_name = #{createUserName} , create_time = #{createTime} , update_user_id = #{updateUserId} , update_user_name = #{updateUserName} , update_time = #{updateTime}  
+        WHERE 
+		id = #{id,jdbcType=BIGINT}
+		 
+  
+</update>
+    
+    <select id="select" resultMap="upmRoleResult">
+	 select 
+    	<include refid="Base_Column_List"/>
+	   
+	        from upm_role WHERE 1=1  
+	  
+			<if test="id != null ">
+			and   id = #{id,jdbcType=BIGINT}
+			</if>
+			<if test="roleCode != null and  roleCode != ''" >
+				and   role_code like concat('%', #{roleCode,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="appId != null and  appId != ''" >
+				and   app_id like concat('%', #{appId,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="roleName != null and  roleName != ''" >
+				and   role_name like concat('%', #{roleName,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="roleDesc != null and  roleDesc != ''" >
+				and   role_desc like concat('%', #{roleDesc,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="lockStatus != null and  lockStatus != ''" >
+				and   lock_Status like concat('%', #{lockStatus,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="createUserId != null ">
+			and   create_user_id = #{createUserId,jdbcType=BIGINT}
+			</if>
+			<if test="createUserName != null and  createUserName != ''" >
+				and   create_user_name like concat('%', #{createUserName,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="createTime != null ">
+			and   create_time = #{createTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="updateUserId != null ">
+			and   update_user_id = #{updateUserId,jdbcType=BIGINT}
+			</if>
+			<if test="updateUserName != null and  updateUserName != ''" >
+				and   update_user_name like concat('%', #{updateUserName,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="updateTime != null ">
+			and   update_time = #{updateTime,jdbcType=TIMESTAMP}
+			</if>
+		
+    </select>
+      
+<select id="selectByExample" resultMap="upmRoleResult" >
+	 select 
+		<include refid="Base_Column_List"/>
+   	       	   from upm_role WHERE 1=1  
+	  
+			<if test="id != null ">
+			and   id = #{id,jdbcType=BIGINT}
+			</if>
+			<if test="roleCode != null and  roleCode != ''" >
+				and   role_code like concat('%', #{roleCode,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="appId != null and  appId != ''" >
+				and   app_id like concat('%', #{appId,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="roleName != null and  roleName != ''" >
+				and   role_name like concat('%', #{roleName,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="roleDesc != null and  roleDesc != ''" >
+				and   role_desc like concat('%', #{roleDesc,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="lockStatus != null and  lockStatus != ''" >
+				and   lock_Status like concat('%', #{lockStatus,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="createUserId != null ">
+			and   create_user_id = #{createUserId,jdbcType=BIGINT}
+			</if>
+			<if test="createUserName != null and  createUserName != ''" >
+				and   create_user_name like concat('%', #{createUserName,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="createTime != null ">
+			and   create_time = #{createTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="updateUserId != null ">
+			and   update_user_id = #{updateUserId,jdbcType=BIGINT}
+			</if>
+			<if test="updateUserName != null and  updateUserName != ''" >
+				and   update_user_name like concat('%', #{updateUserName,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="updateTime != null ">
+			and   update_time = #{updateTime,jdbcType=TIMESTAMP}
+			</if>
+					
+  </select>
+
+<select id="selectByPageExample" resultType="java.util.HashMap" >
+	 select 
+		<include refid="Base_Column_List"/>
+   	       	   from upm_role WHERE 1=1  
+	  
+			<if test="id != null ">
+			and   id = #{id,jdbcType=BIGINT}
+			</if>
+			<if test="roleCode != null and  roleCode != ''" >
+				and   role_code like concat('%', #{roleCode,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="appId != null and  appId != ''" >
+				and   app_id like concat('%', #{appId,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="roleName != null and  roleName != ''" >
+				and   role_name like concat('%', #{roleName,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="roleDesc != null and  roleDesc != ''" >
+				and   role_desc like concat('%', #{roleDesc,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="lockStatus != null and  lockStatus != ''" >
+				and   lock_Status like concat('%', #{lockStatus,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="createUserId != null ">
+			and   create_user_id = #{createUserId,jdbcType=BIGINT}
+			</if>
+			<if test="createUserName != null and  createUserName != ''" >
+				and   create_user_name like concat('%', #{createUserName,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="createTime != null ">
+			and   create_time = #{createTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="updateUserId != null ">
+			and   update_user_id = #{updateUserId,jdbcType=BIGINT}
+			</if>
+			<if test="updateUserName != null and  updateUserName != ''" >
+				and   update_user_name like concat('%', #{updateUserName,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="updateTime != null ">
+			and   update_time = #{updateTime,jdbcType=TIMESTAMP}
+			</if>
+		
+	       <if test="sortName!= null and  sortName != ''" >
+            order by ${sortName} ${sortOrder}
+        </if>
+			
+  </select>
+
+</mapper>

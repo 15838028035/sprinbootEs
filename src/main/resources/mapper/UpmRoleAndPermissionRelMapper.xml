@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+
+<mapper namespace="com.thinkit.cloud.upm.dao.UpmRoleAndPermissionRelMapper">
+    <resultMap id="upmRoleAndPermissionRelResult" type="com.thinkit.cloud.upm.bean.UpmRoleAndPermissionRel">
+        <result property="id" column="id" jdbcType="BIGINT"   />
+        <result property="roleId" column="role_id" jdbcType="BIGINT"   />
+        <result property="permissionId" column="permission_id" jdbcType="BIGINT"   />
+        <result property="createUserId" column="create_user_id" jdbcType="BIGINT"   />
+        <result property="createUserName" column="create_user_name" jdbcType="VARCHAR"   />
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"   />
+        <result property="updateUserId" column="update_user_id" jdbcType="BIGINT"   />
+        <result property="updateUserName" column="update_user_name" jdbcType="VARCHAR"   />
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"   />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        <![CDATA[
+       
+            id ,
+            role_id ,
+            permission_id ,
+            create_user_id ,
+            create_user_name ,
+            create_time ,
+            update_user_id ,
+            update_user_name ,
+            update_time 
+        ]]>
+    </sql>
+
+   <select id="selectByPrimaryKey" resultMap="upmRoleAndPermissionRelResult">
+     select 
+        <include refid="Base_Column_List"/>
+        
+            from upm_role_and_permission_rel 
+            where 
+               id = #{id,jdbcType=BIGINT}
+            
+</select>
+
+ <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+           delete from upm_role_and_permission_rel where
+        id = #{id,jdbcType=BIGINT}
+    
+       </delete>
+
+ <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+
+        INSERT INTO upm_role_and_permission_rel (
+         id, role_id, permission_id, create_user_id, create_user_name, create_time, update_user_id, update_user_name, update_time
+        ) VALUES (
+         #{id,jdbcType=BIGINT}, #{roleId,jdbcType=BIGINT}, #{permissionId,jdbcType=BIGINT}, #{createUserId,jdbcType=BIGINT}, #{createUserName,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateUserId,jdbcType=BIGINT}, #{updateUserName,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}        
+        )
+   
+</insert>
+
+ <insert id="insertSelective" parameterType="com.thinkit.cloud.upm.bean.UpmRoleAndPermissionRel">
+          INSERT INTO upm_role_and_permission_rel 
+             <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="roleId != null" >
+                role_id,
+            </if>
+            <if test="permissionId != null" >
+                permission_id,
+            </if>
+            <if test="createUserId != null" >
+                create_user_id,
+            </if>
+            <if test="createUserName != null" >
+                create_user_name,
+            </if>
+            <if test="createTime != null" >
+                create_time,
+            </if>
+            <if test="updateUserId != null" >
+                update_user_id,
+            </if>
+            <if test="updateUserName != null" >
+                update_user_name,
+            </if>
+            <if test="updateTime != null" >
+                update_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+
+                <if test="id != null" >
+                     #{id,jdbcType=BIGINT},
+                </if>
+                <if test="roleId != null" >
+                     #{roleId,jdbcType=BIGINT},
+                </if>
+                <if test="permissionId != null" >
+                     #{permissionId,jdbcType=BIGINT},
+                </if>
+                <if test="createUserId != null" >
+                     #{createUserId,jdbcType=BIGINT},
+                </if>
+                <if test="createUserName != null" >
+                     #{createUserName,jdbcType=VARCHAR},
+                </if>
+                <if test="createTime != null" >
+                     #{createTime,jdbcType=TIMESTAMP},
+                </if>
+                <if test="updateUserId != null" >
+                     #{updateUserId,jdbcType=BIGINT},
+                </if>
+                <if test="updateUserName != null" >
+                     #{updateUserName,jdbcType=VARCHAR},
+                </if>
+                <if test="updateTime != null" >
+                     #{updateTime,jdbcType=TIMESTAMP},
+                </if>
+        </trim>
+ </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.thinkit.cloud.upm.bean.UpmRoleAndPermissionRel">
+    
+        UPDATE upm_role_and_permission_rel 
+     
+      <set >
+                <if test="roleId != null ">
+                role_id = #{roleId,jdbcType=BIGINT} ,
+                </if>
+                <if test="permissionId != null ">
+                permission_id = #{permissionId,jdbcType=BIGINT} ,
+                </if>
+                <if test="createUserId != null ">
+                create_user_id = #{createUserId,jdbcType=BIGINT} ,
+                </if>
+                <if test="createUserName != null and  createUserName != ''" >
+                create_user_name = #{createUserName,jdbcType=VARCHAR} ,
+                </if>
+                <if test="createTime != null ">
+                create_time = #{createTime,jdbcType=TIMESTAMP} ,
+                </if>
+                <if test="updateUserId != null ">
+                update_user_id = #{updateUserId,jdbcType=BIGINT} ,
+                </if>
+                <if test="updateUserName != null and  updateUserName != ''" >
+                update_user_name = #{updateUserName,jdbcType=VARCHAR} ,
+                </if>
+                <if test="updateTime != null ">
+                update_time = #{updateTime,jdbcType=TIMESTAMP} ,
+                </if>
+
+     </set>
+        WHERE 
+            id = #{id,jdbcType=BIGINT}
+        
+    </update>
+   
+    <update id="updateByPrimaryKey" >
+
+        UPDATE upm_role_and_permission_rel SET
+            role_id = #{roleId} , permission_id = #{permissionId} , create_user_id = #{createUserId} , create_user_name = #{createUserName} , create_time = #{createTime} , update_user_id = #{updateUserId} , update_user_name = #{updateUserName} , update_time = #{updateTime}  
+        WHERE 
+        id = #{id,jdbcType=BIGINT}
+         
+  
+</update>
+    
+    <select id="select" resultMap="upmRoleAndPermissionRelResult">
+     select 
+        <include refid="Base_Column_List"/>
+       
+            from upm_role_and_permission_rel WHERE 1=1  
+      
+            <if test="id != null ">
+            and   id = #{id,jdbcType=BIGINT}
+            </if>
+            <if test="roleId != null ">
+            and   role_id = #{roleId,jdbcType=BIGINT}
+            </if>
+            <if test="permissionId != null ">
+            and   permission_id = #{permissionId,jdbcType=BIGINT}
+            </if>
+            <if test="createUserId != null ">
+            and   create_user_id = #{createUserId,jdbcType=BIGINT}
+            </if>
+            <if test="createUserName != null and  createUserName != ''" >
+                and   create_user_name = #{createUserName,jdbcType=VARCHAR}
+            </if>
+                            
+            <if test="createTime != null ">
+            and   create_time = #{createTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="updateUserId != null ">
+            and   update_user_id = #{updateUserId,jdbcType=BIGINT}
+            </if>
+            <if test="updateUserName != null and  updateUserName != ''" >
+                and   update_user_name = #{updateUserName,jdbcType=VARCHAR}
+            </if>
+                            
+            <if test="updateTime != null ">
+            and   update_time = #{updateTime,jdbcType=TIMESTAMP}
+            </if>
+        
+    </select>
+      
+<select id="selectByExample" resultMap="upmRoleAndPermissionRelResult" >
+     select 
+        <include refid="Base_Column_List"/>
+               from upm_role_and_permission_rel WHERE 1=1  
+      
+            <if test="id != null ">
+            and   id = #{id,jdbcType=BIGINT}
+            </if>
+            <if test="roleId != null ">
+            and   role_id = #{roleId,jdbcType=BIGINT}
+            </if>
+            <if test="permissionId != null ">
+            and   permission_id = #{permissionId,jdbcType=BIGINT}
+            </if>
+            <if test="createUserId != null ">
+            and   create_user_id = #{createUserId,jdbcType=BIGINT}
+            </if>
+            <if test="createUserName != null and  createUserName != ''" >
+                and   create_user_name = #{createUserName,jdbcType=VARCHAR}
+            </if>
+                            
+            <if test="createTime != null ">
+            and   create_time = #{createTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="updateUserId != null ">
+            and   update_user_id = #{updateUserId,jdbcType=BIGINT}
+            </if>
+            <if test="updateUserName != null and  updateUserName != ''" >
+                and   update_user_name = #{updateUserName,jdbcType=VARCHAR}
+            </if>
+                            
+            <if test="updateTime != null ">
+            and   update_time = #{updateTime,jdbcType=TIMESTAMP}
+            </if>
+                    
+  </select>
+
+<select id="selectByPageExample" resultType="java.util.HashMap" >
+     select 
+        <include refid="Base_Column_List"/>
+               from upm_role_and_permission_rel WHERE 1=1  
+      
+            <if test="id != null ">
+            and   id = #{id,jdbcType=BIGINT}
+            </if>
+            <if test="roleId != null ">
+            and   role_id = #{roleId,jdbcType=BIGINT}
+            </if>
+            <if test="permissionId != null ">
+            and   permission_id = #{permissionId,jdbcType=BIGINT}
+            </if>
+            <if test="createUserId != null ">
+            and   create_user_id = #{createUserId,jdbcType=BIGINT}
+            </if>
+            <if test="createUserName != null and  createUserName != ''" >
+                and   create_user_name = #{createUserName,jdbcType=VARCHAR}
+            </if>
+                            
+            <if test="createTime != null ">
+            and   create_time = #{createTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="updateUserId != null ">
+            and   update_user_id = #{updateUserId,jdbcType=BIGINT}
+            </if>
+            <if test="updateUserName != null and  updateUserName != ''" >
+                and   update_user_name = #{updateUserName,jdbcType=VARCHAR}
+            </if>
+                            
+            <if test="updateTime != null ">
+            and   update_time = #{updateTime,jdbcType=TIMESTAMP}
+            </if>
+        
+       <if test="sortName!= null and  sortName != ''" >
+            order by ${sortName} ${sortOrder}
+        </if>
+            
+  </select>
+
+<select id="findRolePermissionIds" resultType="java.lang.Long">
+        <![CDATA[
+            SELECT PERMISSION_ID FROM    upm_role_and_permission_rel  WHERE role_id =  #{roleId,jdbcType=VARCHAR}
+        ]]>
+    </select>
+    
+    
+     <delete id="deletePermissionById" parameterType="java.lang.Long">
+           delete from upm_role_and_permission_rel where
+        role_id = #{roleId,jdbcType=BIGINT}
+    
+       </delete>
+    
+    
+</mapper>
