@@ -11,7 +11,6 @@ import org.elasticsearch.action.DocWriteResponse;
 import org.elasticsearch.action.admin.indices.create.CreateIndexRequest;
 import org.elasticsearch.action.admin.indices.create.CreateIndexResponse;
 import org.elasticsearch.action.admin.indices.get.GetIndexRequest;
-import org.elasticsearch.action.admin.indices.mapping.put.PutMappingRequest;
 import org.elasticsearch.action.delete.DeleteRequest;
 import org.elasticsearch.action.delete.DeleteResponse;
 import org.elasticsearch.action.get.GetRequest;
@@ -19,14 +18,11 @@ import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.support.WriteRequest.RefreshPolicy;
-import org.elasticsearch.action.support.master.AcknowledgedResponse;
 import org.elasticsearch.action.update.UpdateRequest;
 import org.elasticsearch.action.update.UpdateResponse;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.common.settings.Settings;
-import org.elasticsearch.common.xcontent.XContentBuilder;
-import org.elasticsearch.common.xcontent.XContentFactory;
 import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.search.SearchHit;
@@ -139,107 +135,6 @@ public class EsCrud {
             }
         } catch (ResourceAlreadyExistsException | IOException e) {
             LOGGER.error("索引{}创建时程序发生异常", index);
-            LOGGER.error("", e);
-        }
-    }
-    
-
-    /**
-     * 语音情报分析系统话单Mapping
-     *
-     * @param restHighLevelClient
-     * @param index
-     * @param type
-     */
-    public static void formatMapping(RestHighLevelClient restHighLevelClient, String index, String type) {
-        PutMappingRequest putMappingRequest = new PutMappingRequest(index);
-        putMappingRequest.type(type);
-
-        try {
-            XContentBuilder xContentBuilder = XContentFactory.jsonBuilder();
-            xContentBuilder.startObject()
-                    .startObject("properties")
-                    .startObject("serialNumber").field("type", "keyword").endObject()
-                    .startObject("insertTime").field("type", "date").field("format", "yyyy-MM-dd HH:mm:ss||yyyy-MM-dd").endObject()
-                    .startObject("callStartTime").field("type", "date").field("format", "yyyy-MM-dd HH:mm:ss||yyyy-MM-dd").endObject()
-                    .startObject("callEndTime").field("type", "date").field("format", "yyyy-MM-dd HH:mm:ss||yyyy-MM-dd").endObject()
-                    .startObject("callNumber").field("type", "keyword").endObject()
-                    .startObject("calledNumber").field("type", "keyword").endObject()
-                    .startObject("callDirection").field("type", "long").endObject()
-                    .startObject("isEachRecord").field("type", "long").endObject()
-                    .startObject("lineType").field("type", "long").endObject()
-                    .startObject("channelNumber").field("type", "long").endObject()
-                    .startObject("signalType").field("type", "long").endObject()
-                    .startObject("holdDuration").field("type", "double").endObject()
-                    .startObject("isImportance").field("type", "long").endObject()
-                    .startObject("handleState").field("type", "long").endObject()
-                    .startObject("reserve1").field("type", "keyword").endObject()
-                    .startObject("reserve2").field("type", "keyword").endObject()
-                    .startObject("reserve3").field("type", "keyword").endObject()
-                    .startObject("reserve4").field("type", "keyword").endObject()
-                    .startObject("reserve5").field("type", "keyword").endObject()
-                    .startObject("reserve6").field("type", "long").endObject()
-                    .startObject("reserve7").field("type", "long").endObject()
-                    .startObject("reserve8").field("type", "double").endObject()
-                    .startObject("reserve9").field("type", "double").endObject()
-                    .startObject("reserve10").field("type", "date").field("format", "yyyy-MM-dd HH:mm:ss||yyyy-MM-dd").endObject()
-                    .startObject("reserve11").field("type", "date").field("format", "yyyy-MM-dd HH:mm:ss||yyyy-MM-dd").endObject()
-                   // .startObject("yiWuReason").field("type", "keyword").endObject()
-                   // .startObject("yiLouYiWuClassTop").field("type", "keyword").endObject()
-                   // .startObject("yiLouYiWuType").field("type", "keyword").endObject()
-                    .startObject("audioList").field("type", "nested")
-                    .startObject("properties")
-                    .startObject("audioNumber").field("type", "keyword").endObject()
-                    .startObject("audioPath").field("type", "keyword").endObject()
-                    .startObject("audioLength").field("type", "double").endObject()
-                    .startObject("reserve1").field("type", "keyword").endObject()
-                    .startObject("reserve2").field("type", "keyword").endObject()
-                    .startObject("reserve3").field("type", "keyword").endObject()
-                    .startObject("reserve4").field("type", "long").endObject()
-                    .startObject("reserve5").field("type", "double").endObject()
-                    .startObject("reserve6").field("type", "date").field("format", "yyyy-MM-dd HH:mm:ss||yyyy-MM-dd").endObject()
-                    .startObject("engineList").field("type", "nested")
-                    .startObject("properties")
-                    .startObject("engineName").field("type", "keyword").endObject()
-                    .startObject("engineStatus").field("type", "long").endObject()
-                    .startObject("confirmTime").field("type", "date").field("format", "yyyy-MM-dd HH:mm:ss||yyyy-MM-dd").endObject()
-                    .startObject("confirmEndTime").field("type", "date").field("format", "yyyy-MM-dd HH:mm:ss||yyyy-MM-dd").endObject()
-                    .startObject("reserve1").field("type", "keyword").endObject()
-                    .startObject("reserve2").field("type", "keyword").endObject()
-                    .startObject("reserve3").field("type", "long").endObject()
-                    .startObject("reserve4").field("type", "double").endObject()
-                    .startObject("reserve5").field("type", "date").field("format", "yyyy-MM-dd HH:mm:ss||yyyy-MM-dd").endObject()
-                    .startObject("engineResult").field("type", "nested")
-                    .startObject("properties")
-                    .startObject("serialNumber").field("type", "long").endObject()
-                    .startObject("result").field("type", "keyword").endObject()
-                    .startObject("remark").field("type", "keyword").endObject()
-                    .startObject("startTime").field("type", "double").endObject()
-                    .startObject("duration").field("type", "double").endObject()
-                    .startObject("confidence").field("type", "double").endObject()
-                    .startObject("judgeState").field("type", "long").endObject()
-                    .startObject("reserve1").field("type", "keyword").endObject()
-                    .startObject("reserve2").field("type", "long").endObject()
-                    .startObject("reserve3").field("type", "double").endObject()
-                    .endObject()
-                    .endObject()
-                    .endObject()
-                    .endObject()
-                    .endObject()
-                    .endObject()
-                    .endObject()
-                    .endObject();
-
-            putMappingRequest.source(xContentBuilder);
-
-            AcknowledgedResponse acknowledgedResponse = restHighLevelClient.indices().putMapping(putMappingRequest, RequestOptions.DEFAULT);
-            if (acknowledgedResponse.isAcknowledged()) {
-                LOGGER.info("{}.{}格式化成功", index, type);
-            } else {
-                LOGGER.info("{}.{}格式化失败", index, type);
-            }
-        } catch (ElasticsearchException | IOException e) {
-            LOGGER.error("{}.{}格式化时程序发生异常", index, type);
             LOGGER.error("", e);
         }
     }
