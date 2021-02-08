@@ -4,7 +4,7 @@ RUN echo "Asia/Shanghai" > /etc/timezone
 VOLUME /tmp
 RUN mkdir /app
 
-COPY /*.zip /app/
+COPY target/*.zip /app/
 RUN cd /app
 RUN unzip sprinbootes-0.0.1-SNAPSHOT-assembly
 ENTRYPOINT ["cd /app/sprinbootes-0.0.1-SNAPSHOT-assembly/sprinbootes-0.0.1-SNAPSHOT/bin && startup.sh"]
