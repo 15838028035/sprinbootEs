@@ -2,12 +2,9 @@
 FROM adoptopenjdk/openjdk8-openj9:alpine-slim
 RUN echo "Asia/Shanghai" > /etc/timezone
 VOLUME /tmp
-RUN mkdir app
-RUN mkdir -p /app/config
-RUN mkdir -p /app/lib
+RUN mkdir /app
 
-COPY target/lib/* /app/lib
-COPY config/* /app/config/
-ADD sprinbootes-0.0.1-SNAPSHOT.jar /app/sprinbootes-0.0.1-SNAPSHOT.jar
-
-ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-Xshareclasses","-Xquickstart","-jar","/app/sprinbootes-0.0.1-SNAPSHOT.jar"]
+COPY /*.zip /app/
+CD /app
+unzip sprinbootes-0.0.1-SNAPSHOT-assembly
+ENTRYPOINT ["cd /app/sprinbootes-0.0.1-SNAPSHOT-assembly/sprinbootes-0.0.1-SNAPSHOT/bin && startup.sh"]
