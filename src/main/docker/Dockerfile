@@ -4,7 +4,8 @@ RUN echo "Asia/Shanghai" > /etc/timezone
 VOLUME /tmp
 RUN mkdir /app
 
-COPY target/*.zip /app/
+COPY sprinbootes-0.0.1-SNAPSHOT-assembly.zip /app/
 RUN cd /app
-RUN unzip sprinbootes-0.0.1-SNAPSHOT-assembly
-ENTRYPOINT ["cd /app/sprinbootes-0.0.1-SNAPSHOT-assembly/sprinbootes-0.0.1-SNAPSHOT/bin && startup.sh"]
+RUN unzip sprinbootes-0.0.1-SNAPSHOT-assembly.zip
+
+ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-Xshareclasses","-Xquickstart","-jar","/app/sprinbootes-0.0.1-SNAPSHOT/sprinbootes-0.0.1-SNAPSHOT.jar"]
